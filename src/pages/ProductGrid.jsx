@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Badge, Button, Tooltip, FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
-import { AppstoreAddOutlined, PlusCircleOutlined, PlusOutlined, ProductFilled, ProductOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, PlusCircleOutlined, PlusOutlined, ProductFilled, ProductOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { fetchAllProductAPI } from "../services/api.service";
 import "../components/ProductGrid.css";
 
@@ -68,6 +68,13 @@ const ProductGrid = () => {
                         onClick={() => navigate('/add-product')}
                     />
                 </Tooltip>
+                {/* <Tooltip title="Lịch sử mua hàng" placement="left">
+                    <FloatButton
+                        icon={<ShoppingCartOutlined />}
+                        type="primary"
+                        onClick={() => navigate('/order-history')}
+                    />
+                </Tooltip> */}
             </FloatButton.Group>
         </>
     );

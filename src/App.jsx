@@ -8,6 +8,7 @@ import ThankYouPage from "./pages/ThankYouPage";
 import PaymentFailedPage from "./pages/PaymentFailedPage";
 import AddCategoryPage from "./pages/AddCategoryPage";
 import AddProductPage from "./pages/AddProductPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/payment-failed" element={<PaymentFailedPage />} />
           <Route path="/add-category" element={<AddCategoryPage />} />
           <Route path="/add-product" element={<AddProductPage />} />
+          <Route path="/order-history" element={<OrderHistoryPage />} />
         </Routes>
       </AppLayout>
     </Router>

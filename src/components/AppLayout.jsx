@@ -1,8 +1,7 @@
 import { Layout, Badge } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, HistoryOutlined } from "@ant-design/icons";
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 
 import "./Layout.css";
 
@@ -28,23 +27,33 @@ const AppLayout = ({ children }) => {
                     style={{
                         display: "flex",
                         justifyContent: "space-between",
-
+                        alignItems: "center",
                     }}
-
                 >
                     <span className="header-title"
                         onClick={() => navigate("/")}
                     >Cửa Hàng Điện Tử</span>
-                    <Badge count={cartItems.length} offset={[0, -2]}>
-                        <ShoppingCartOutlined className="cart-icon"
+                    <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+                        <HistoryOutlined
+                            className="history-icon"
                             style={{
                                 cursor: "pointer",
-                                fontSize: "30px", color: "white"
+                                fontSize: "30px",
+                                color: "white"
                             }}
-                            onClick={() => navigate("/cart")}
+                            onClick={() => navigate("/order-history")}
                         />
-                    </Badge>
-
+                        <Badge count={cartItems.length} offset={[0, -2]}>
+                            <ShoppingCartOutlined className="cart-icon"
+                                style={{
+                                    cursor: "pointer",
+                                    fontSize: "30px",
+                                    color: "white"
+                                }}
+                                onClick={() => navigate("/cart")}
+                            />
+                        </Badge>
+                    </div>
                 </Header>
                 <Content className="content">{children}</Content>
                 <Footer className="footer">&copy; 2025 Cửa Hàng Điện Tử. All rights reserved.</Footer>

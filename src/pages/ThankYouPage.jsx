@@ -69,6 +69,20 @@ const ThankYouPage = () => {
             "tracking_order",
             response.data.order.tracking_id
           );
+          console.log("Tracking order từ GHTK:", response.data.order.tracking_id);
+          setTrackingOrder(response.data.order.tracking_id);
+
+          // Lưu thông tin đơn hàng vào localStorage
+          const savedOrders = localStorage.getItem("orders");
+          const orders = savedOrders ? JSON.parse(savedOrders) : [];
+          const newOrder = {
+            ...orderData,
+            id: uuid,
+            trackingOrder: response.data.order.tracking_id,
+            orderDate: new Date().toISOString(),
+          };
+          orders.push(newOrder);
+          localStorage.setItem("orders", JSON.stringify(orders));
         })
         .catch((error) => {
           console.error(
@@ -95,11 +109,7 @@ const ThankYouPage = () => {
     }
 
     // Lấy tracking order từ localStorage
-    const savedTrackingOrder = localStorage.getItem("tracking_order");
-    if (savedTrackingOrder) {
-      setTrackingOrder(savedTrackingOrder);
-      console.log("Tracking order từ GHTK:", savedTrackingOrder);
-    }
+
   }, [orderData]);
 
   // Kiểm tra nếu có tham số vnp_ResponseCode = 00 (thanh toán thành công)
