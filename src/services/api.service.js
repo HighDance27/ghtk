@@ -5,7 +5,10 @@ const fetchAllProductAPI = () => {
     const URL_BACKEND = "/v1/api/products/all";
     return axios.get(URL_BACKEND);
 }
-
+const fetchProductByIdAPI = (id) => {
+    const URL_BACKEND = `/v1/api/products/${id}`;
+    return axios.get(URL_BACKEND);
+}
 const createOrderAPI = (note, return_name, return_address, return_province,
     return_district, return_ward, return_street, return_tel, return_email) => {
     const URL_BACKEND = `/v1/api/orders`;
@@ -41,5 +44,5 @@ const deleteBookAPI = (id) => {
 }
 export {
     fetchAllProductAPI, createOrderAPI,
-    updateBookAPI, deleteBookAPI
+    updateBookAPI, deleteBookAPI, fetchProductByIdAPI
 }
