@@ -3,6 +3,7 @@ import AppLayout from "./components/AppLayout";
 import ProductDetail from "./pages/ProductDetail";
 import ProductGrid from "./pages/ProductGrid";
 import CartPage from "./pages/CartPage";
+import OrderPage from "./pages/OrderPage";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
           <Route path="/" element={<ProductGrid />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/order" element={<OrderPage />} />
         </Routes>
       </AppLayout>
     </Router>

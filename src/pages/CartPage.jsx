@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../components/AppLayout";
+import { useNavigate } from "react-router-dom";
 import { Card, Button, Typography, List, Layout, message, Empty, InputNumber } from "antd";
 import "./CartPage.css";
 
@@ -8,10 +9,25 @@ const { Content } = Layout;
 
 const CartPage = () => {
     const { cartItems, setCartItems } = useContext(CartContext);
+    const navigate = useNavigate();
 
     const handleRemoveItem = (id) => {
         setCartItems(cartItems.filter(item => item.id !== id));
         message.success("Sản phẩm đã được xóa khỏi giỏ hàng.");
+    };
+
+    const handleQuantityChange = (id, quantity) => {
+        setCartItems(cartItems.map(item =>
+            item.id === id ? { ...item, quantity } : item
+        ));
+    };
+
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            message.warning("Giỏ hàng của bạn đang trống.");
+            return;
+        }
+        navigate("/order");
     };
 
     return (
@@ -44,10 +60,9 @@ const CartPage = () => {
                             </Card>
                         )}
                     />
-
                 )}
                 {cartItems.length > 0 && (
-                    <Button type="primary" className="checkout-button" block>
+                    <Button type="primary" className="checkout-button" block onClick={handleCheckout}>
                         Tiến hành thanh toán
                     </Button>
                 )}
