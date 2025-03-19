@@ -1,0 +1,159 @@
+.thank-you-page {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.thank-you-content {
+
+    width: 60%;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.order-summary {
+    margin-top: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary .ant-card-head {
+    background-color: #1890ff;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.order-summary .ant-card-head-title {
+    color: white;
+}
+
+.order-info, .customer-info, .order-items {
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.order-info {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+}
+
+.customer-info {
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+}
+
+.order-items {
+    background-color: #fff7e6;
+    border: 1px solid #ffd591;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.order-items {
+    margin-top: 30px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+    border: 1px solid #d9d9d9;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info .ant-typography {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.ant-result {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-result-extra {
+    margin-top: 24px;
+}
+
+.ant-result-extra .ant-btn {
+    margin: 0 8px;
+}
+
+/* Style cho tiêu đề các section */
+.order-info h4, .customer-info h4, .order-items h4 {
+    color: #1890ff;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1890ff;
+}
+
+/* Style cho text */
+.info-row .ant-typography {
+    color: #262626;
+}
+
+.info-row .ant-typography strong {
+    color: #1890ff;
+}
+
+/* Style cho giá tiền */
+.info-row .ant-typography:last-child {
+    color: #f5222d;
+    font-weight: 500;
+}
+
+@media (max-width: 576px) {
+    .thank-you-content {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .item-image {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .order-info, .customer-info, .order-items {
+        padding: 15px;
+    }
+} 

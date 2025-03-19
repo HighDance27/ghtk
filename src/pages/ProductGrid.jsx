@@ -3,7 +3,6 @@ import { Card, Badge, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { fetchAllProductAPI } from "../services/api.service";
 import "../components/ProductGrid.css";
-import AppLayout from "../components/AppLayout";
 
 const ProductGrid = () => {
     const [products, setProducts] = useState([]);

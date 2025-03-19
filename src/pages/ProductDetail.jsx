@@ -44,7 +44,7 @@ const ProductDetail = () => {
         notification.success({
             message: "Thêm vào giỏ hàng",
             description: "Sản phẩm đã được thêm vào giỏ hàng thành công!",
-            placement: "topRight",
+            placement: "top",
         });
     };
 

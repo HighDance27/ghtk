@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { CartContext } from "../components/AppLayout";
-import { Card, Button, Typography, List, Layout, message, Form, Input } from "antd";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Card, Typography, Layout, Table, Button, message } from "antd";
+import { createVNPayPaymentAPI } from "../services/api.service";
 import "./OrderPage.css";
 
 const { Title, Text } = Typography;
@@ -8,15 +10,58 @@ const { Content } = Layout;
 
 const OrderPage = () => {
     const { cartItems, setCartItems } = useContext(CartContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const orderData = location.state?.orderData;
 
-    const handleOrderSubmit = (values) => {
-        if (cartItems.length === 0) {
-            message.warning("Giỏ hàng của bạn đang trống.");
-            return;
+    const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    const columns = [
+        {
+            title: "Sản phẩm",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Hình ảnh",
+            dataIndex: "image",
+            key: "image",
+            render: (text, record) => <img src={record.image} alt={record.name} className="order-item-image" />,
+        },
+        {
+            title: "Giá tiền",
+            dataIndex: "price",
+            key: "price",
+            render: (text) => (
+                <Text strong style={{ color: "green", fontSize: "16px" }}>
+                    {new Intl.NumberFormat('vi-VN', { style: "currency", currency: "VND" }).format(text)}
+                </Text>
+            ),
+        },
+        {
+            title: "Số lượng",
+            dataIndex: "quantity",
+            key: "quantity",
         }
+    ];
 
-        message.success("Đơn hàng đã được đặt thành công!");
-        setCartItems([]); // Xóa giỏ hàng sau khi đặt hàng
+    const handleVNPayPayment = async () => {
+        try {
+            const response = await createVNPayPaymentAPI(totalAmount);
+            console.log("Phản hồi từ VNPay API:", response.data);
+
+            if (response.data) {
+                // Xóa giỏ hàng và form data trước khi chuyển hướng
+                setCartItems([]);
+                localStorage.removeItem('cartFormData');
+                window.location.href = response.data;
+            } else {
+                message.error("Không thể tạo thanh toán VNPay.");
+            }
+        } catch (error) {
+            console.error("Lỗi khi kết nối đến VNPay:", error);
+            message.error("Lỗi khi kết nối đến VNPay. Vui lòng thử lại!");
+        }
     };
 
     return (
@@ -26,37 +71,21 @@ const OrderPage = () => {
                 {cartItems.length === 0 ? (
                     <Text>Không có sản phẩm nào trong đơn hàng.</Text>
                 ) : (
-                    <List
-                        dataSource={cartItems}
-                        renderItem={(item) => (
-                            <Card className="order-item" key={item.id}>
-                                <img src={item.image} alt={item.name} className="order-item-image" />
-                                <div className="order-item-info">
-                                    <Title level={4}>{item.name}</Title>
-                                    <Text strong>
-                                        {new Intl.NumberFormat('vi-VN', { style: "currency", currency: "VND" }).format(item.price)}
-                                    </Text>
-                                    <br />
-                                    <Text>Số lượng: {item.quantity}</Text>
-                                </div>
-                            </Card>
-                        )}
-                    />
+                    <Card className="order-summary">
+                        <Table
+                            dataSource={cartItems}
+                            columns={columns}
+                            pagination={false}
+                            rowKey="id"
+                        />
+                        <div className="order-total">
+                            <Title level={3} style={{ color: "red" }}>Tổng tiền: {new Intl.NumberFormat('vi-VN', { style: "currency", currency: "VND" }).format(totalAmount)}</Title>
+                        </div>
+                        <Button type="primary" block onClick={handleVNPayPayment} style={{ marginTop: "20px" }}>
+                            Xác nhận & Thanh toán VNPay
+                        </Button>
+                    </Card>
                 )}
-                <Form onFinish={handleOrderSubmit} className="order-form">
-                    <Form.Item name="name" rules={[{ required: true, message: "Vui lòng nhập tên của bạn!" }]}>
-                        <Input placeholder="Họ và Tên" />
-                    </Form.Item>
-                    <Form.Item name="address" rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}>
-                        <Input placeholder="Địa chỉ giao hàng" />
-                    </Form.Item>
-                    <Form.Item name="phone" rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}>
-                        <Input placeholder="Số điện thoại" />
-                    </Form.Item>
-                    <Button type="primary" htmlType="submit" block>
-                        Xác nhận đơn hàng
-                    </Button>
-                </Form>
             </Content>
         </Layout>
     );
