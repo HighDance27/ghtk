@@ -1,6 +1,8 @@
 import { useLocation, Link } from "react-router-dom";
-import { Layout, Typography, Button, Card, Result } from "antd";
+import { Layout, Typography, Button, Card, Result, message } from "antd";
 import { CheckCircleOutlined, HomeOutlined, ShoppingOutlined } from "@ant-design/icons";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../components/AppLayout";
 import "./ThankYouPage.css";
 
 const { Content } = Layout;
@@ -8,20 +10,59 @@ const { Title, Text } = Typography;
 
 const ThankYouPage = () => {
     const location = useLocation();
-    const orderData = location.state?.orderData;
+    const { setCartItems } = useContext(CartContext);
+    const [orderData, setOrderData] = useState(location.state?.orderData || null);
+
+    // Cố gắng khôi phục thông tin đơn hàng từ localStorage nếu không có trong location state
+    useEffect(() => {
+        if (!orderData) {
+            const savedOrderData = localStorage.getItem('orderData');
+            if (savedOrderData) {
+                try {
+                    const parsedData = JSON.parse(savedOrderData);
+                    setOrderData(parsedData);
+                    // Xóa dữ liệu sau khi đã sử dụng
+                    localStorage.removeItem('orderData');
+                } catch (error) {
+                    console.error("Lỗi khi phân tích dữ liệu đơn hàng:", error);
+                }
+            }
+        }
+    }, [orderData]);
+
+    // Kiểm tra nếu có tham số vnp_ResponseCode = 00 (thanh toán thành công)
+    // và đảm bảo giỏ hàng được xóa khi vào trang thank-you
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const vnpResponseCode = urlParams.get('vnp_ResponseCode');
+
+        if (vnpResponseCode === '00') {
+            message.success("Thanh toán thành công!");
+        }
+
+        // Đảm bảo giỏ hàng được xóa khi vào trang thank-you, 
+        // ngay cả khi người dùng truy cập trực tiếp thông qua URL
+        setCartItems([]);
+        localStorage.removeItem('cartFormData');
+    }, [setCartItems]);
 
     if (!orderData) {
         return (
             <Layout className="thank-you-page">
                 <Content className="thank-you-content">
                     <Result
-                        status="error"
+                        status="warning"
                         title="Không tìm thấy thông tin đơn hàng"
-                        subTitle="Vui lòng quay lại trang chủ và thử lại"
+                        subTitle="Đơn hàng của bạn có thể đã được xử lý, nhưng không thể hiển thị chi tiết"
                         extra={[
                             <Link to="/" key="home">
                                 <Button type="primary" icon={<HomeOutlined />}>
                                     Về trang chủ
+                                </Button>
+                            </Link>,
+                            <Link to="/cart" key="cart">
+                                <Button icon={<ShoppingOutlined />}>
+                                    Giỏ hàng
                                 </Button>
                             </Link>
                         ]}

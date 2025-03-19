@@ -194,6 +194,8 @@ const CartPage = () => {
                 navigate("/thank-you", { state: { orderData } });
             } else {
                 // Thanh toán VNPay - chuyển đến trang order
+                // Lưu thông tin đơn hàng vào localStorage để sử dụng sau
+                localStorage.setItem('orderData', JSON.stringify(orderData));
                 navigate("/order", { state: { orderData } });
             }
         }).catch(() => {

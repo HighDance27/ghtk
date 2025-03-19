@@ -1,0 +1,84 @@
+.payment-failed-page {
+    min-height: 100vh;
+    padding: 50px 20px;
+    background-color: #f7f7f7;
+}
+
+.payment-failed-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.error-details {
+    margin: 20px 0;
+    border-radius: 8px;
+    border-left: 4px solid #ff4d4f;
+}
+
+.error-details .ant-card-head {
+    background-color: #fff1f0;
+    border-bottom: 1px solid #ffccc7;
+}
+
+.error-details .ant-card-body {
+    padding: 16px;
+    background-color: #fff2f0;
+}
+
+.payment-failed-reason, 
+.payment-failed-support {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #f5222d;
+}
+
+.payment-failed-reason h5,
+.payment-failed-support h5 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.payment-failed-reason ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.payment-failed-reason li {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.payment-failed-support {
+    border-left-color: #1890ff;
+}
+
+.payment-failed-support p {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.ant-result-error .ant-result-title {
+    color: #ff4d4f;
+}
+
+.ant-result-error .ant-result-subtitle {
+    color: #666;
+}
+
+@media (max-width: 576px) {
+    .payment-failed-content {
+        padding: 15px;
+    }
+    
+    .payment-failed-reason, 
+    .payment-failed-support {
+        padding: 15px;
+    }
+} 
