@@ -26,15 +26,10 @@ const OrderHistoryPage = () => {
 
     const handleCancelOrder = async (trackingOrder) => {
         try {
-            const response = await axios.post(
-                `https://services.giaohangtietkiem.vn/services/shipment/cancel/${trackingOrder}`,
+            const response = await axios.get(
+                `http://localhost:8080/api/proxy/shipment/cancel/${trackingOrder}`,
                 {},
-                {
-                    headers: {
-                        'X-Client-Source': 'S22863729',
-                        'Token': '172X8NEx658WXkBW1oMX7s0SvCl9eODsA53yPmq'
-                    }
-                }
+
             );
 
             if (response.data.success) {
