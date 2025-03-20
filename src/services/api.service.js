@@ -81,6 +81,29 @@ const fetchWardsAPI = (districtId, searchText = '') => {
     });
 };
 
+// API cho danh mục sản phẩm
+const createCategoryAPI = (categoryData) => {
+    const URL_BACKEND = '/v1/api/categories';
+    return axios.post(URL_BACKEND, categoryData);
+};
+
+const getAllCategoriesAPI = (page = 0, size = 10) => {
+    // Sử dụng endpoint all để lấy tất cả danh mục thay vì phân trang
+    const URL_BACKEND = '/v1/api/categories/all';
+    return axios.get(URL_BACKEND);
+};
+
+const getCategoryByIdAPI = (id) => {
+    const URL_BACKEND = `/v1/api/categories/${id}`;
+    return axios.get(URL_BACKEND);
+};
+
+// API cho sản phẩm
+const createProductAPI = (productData) => {
+    const URL_BACKEND = '/v1/api/products';
+    return axios.post(URL_BACKEND, productData);
+};
+
 export {
     fetchAllProductAPI, createOrderAPI,
     createInvoiceAPI,
@@ -89,5 +112,9 @@ export {
     createVNPayPaymentAPI,
     fetchProvincesAPI,
     fetchDistrictsAPI,
-    fetchWardsAPI
+    fetchWardsAPI,
+    createCategoryAPI,
+    getAllCategoriesAPI,
+    getCategoryByIdAPI,
+    createProductAPI
 }

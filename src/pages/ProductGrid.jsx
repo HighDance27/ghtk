@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Card, Badge, Button } from "antd";
+import { Card, Badge, Button, Tooltip, FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
+import { AppstoreAddOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { fetchAllProductAPI } from "../services/api.service";
 import "../components/ProductGrid.css";
 
@@ -45,9 +46,30 @@ const ProductGrid = () => {
                     </Badge.Ribbon>
                 ))}
             </div>
+
+            <FloatButton.Group
+                trigger="hover"
+                style={{
+                    right: 24,
+                    bottom: 24,
+                }}
+            >
+                <Tooltip title="Thêm danh mục sản phẩm" placement="left">
+                    <FloatButton
+                        icon={<AppstoreAddOutlined />}
+                        onClick={() => navigate('/add-category')}
+                    />
+                </Tooltip>
+                <Tooltip title="Thêm sản phẩm mới" placement="left">
+                    <FloatButton
+                        icon={<PlusCircleOutlined />}
+                        type="primary"
+                        onClick={() => navigate('/add-product')}
+                    />
+                </Tooltip>
+            </FloatButton.Group>
         </>
     );
-
 };
 
 export default ProductGrid;
