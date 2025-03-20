@@ -269,6 +269,14 @@ const CartPage = () => {
                                 <Input placeholder="Nhập họ và tên" />
                             </Form.Item>
 
+                            <Form.Item name="email" label="Email *" rules={[{ required: true, type: 'email', message: "Vui lòng nhập email hợp lệ" }]}>
+                                <Input placeholder="Nhập email" />
+                            </Form.Item>
+
+                            <Form.Item name="date_of_birth" label="Ngày sinh *" rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}>
+                                <Input type="date" />
+                            </Form.Item>
+
                             <Form.Item name="tel" label="Số điện thoại *" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
                                 <Input placeholder="Nhập số điện thoại" />
                             </Form.Item>

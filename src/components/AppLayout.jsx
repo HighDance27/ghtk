@@ -2,6 +2,8 @@ import { Layout, Badge } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 import "./Layout.css";
 
 const { Header, Footer, Content } = Layout;

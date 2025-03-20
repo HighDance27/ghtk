@@ -4,6 +4,7 @@ import { CheckCircleOutlined, HomeOutlined, ShoppingOutlined } from "@ant-design
 import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../components/AppLayout";
 import "./ThankYouPage.css";
+import axios from "axios";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -12,7 +13,62 @@ const ThankYouPage = () => {
     const location = useLocation();
     const { setCartItems } = useContext(CartContext);
     const [orderData, setOrderData] = useState(location.state?.orderData || null);
+    const [trackingOrder, setTrackingOrder] = useState(null);
 
+    useEffect(() => {
+        if (orderData) {
+            const payload = {
+                products: orderData.items.map(item => ({
+                    name: item.name,
+                    weight: item.weight || 0.1,
+                    quantity: item.quantity,
+                    product_code: item.id,
+                })),
+                order: {
+                    id: "DH52110522",
+                    pick_name: "Châu Nguyễn Trường An",
+                    pick_money: 0,
+                    pick_address: "nhà số 170/1 Nguyễn Thị Mười",
+                    pick_province: "Thành Phố Hồ Chí Minh",
+                    pick_district: "Quận 8",
+                    pick_tel: "0783891752",
+                    name: orderData.full_name,
+                    address: orderData.address,
+                    province: "Thành Phố Hồ Chí Minh",
+                    district: "Quận 8",
+                    ward: "Phường 4",
+                    street: "Cao Lỗ",
+                    hamlet: "Khác",
+                    tel: orderData.tel,
+                    email: "anchau03102003",
+                    return_name: "Châu Nguyễn Trường An",
+                    return_address: "nhà số 170/1",
+                    return_provice: "Thành Phố Hồ Chí Minh",
+                    return_ward: "Quận 8",
+                    return_tel: "0783891752",
+                    return_email: "anchau03102003@gmail.com",
+                    value: orderData.total,
+                }
+            };
+
+            const headers = {
+                'X-Client-Source': 'S22863729',
+                'Token': '172X8NEx658WXkBW1oMX7s0SvCl9eODsA53yPmq',
+                'Content-Type': 'application/json'
+            };
+            console.log("Payload gửi đến GHTK:", JSON.stringify(payload, null, 2));
+
+            axios.post('https://services.giaohangtietkiem.vn/services/shipment/order', payload, { headers })
+                .then(response => {
+                    console.log('GHTK Response:', response.data);
+                    localStorage.setItem('tracking_order', response.data.order_id);
+                })
+                .catch(error => {
+                    console.error('Lỗi gửi đơn hàng GHTK:', error.response ? error.response.data : error.message);
+                });
+
+        }
+    }, [orderData]);
     // Cố gắng khôi phục thông tin đơn hàng từ localStorage nếu không có trong location state
     useEffect(() => {
         if (!orderData) {
@@ -27,6 +83,13 @@ const ThankYouPage = () => {
                     console.error("Lỗi khi phân tích dữ liệu đơn hàng:", error);
                 }
             }
+        }
+
+        // Lấy tracking order từ localStorage
+        const savedTrackingOrder = localStorage.getItem('tracking_order');
+        if (savedTrackingOrder) {
+            setTrackingOrder(savedTrackingOrder);
+            console.log('Tracking order từ GHTK:', savedTrackingOrder);
         }
     }, [orderData]);
 
@@ -94,6 +157,10 @@ const ThankYouPage = () => {
                         <div className="info-row">
                             <Text strong>Mã đơn hàng:</Text>
                             <Text>{orderData.id || "Đang xử lý"}</Text>
+                        </div>
+                        <div className="info-row">
+                            <Text strong>Mã vận đơn GHTK:</Text>
+                            <Text>{trackingOrder || "Đang xử lý"}</Text>
                         </div>
                         <div className="info-row">
                             <Text strong>Ngày đặt:</Text>
