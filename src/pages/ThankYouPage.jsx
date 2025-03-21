@@ -45,7 +45,7 @@ const ThankYouPage = () => {
           street: "Cao Lỗ",
           hamlet: "Khác",
           tel: orderData.tel,
-          email: "anchau03102003",
+          email: "anchau03102003@gmail.com",
           return_name: "Châu Nguyễn Trường An",
           return_address: "nhà số 170/1",
           return_provice: "Thành Phố Hồ Chí Minh",
@@ -55,6 +55,8 @@ const ThankYouPage = () => {
           value: orderData.total,
         },
       };
+
+      console.log("Payload gửi đi:", payload);
 
       axios
         .post("http://localhost:8080/api/proxy/shipment/order", payload, {

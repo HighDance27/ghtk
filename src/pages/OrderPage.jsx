@@ -33,22 +33,10 @@ const OrderPage = () => {
             const ghtkData = {
                 "products": [
                     {
-                        "name": "bút",
-                        "weight": 0.1,
+                        "name": orderData.items.name,
+                        "weight": orderData.items.weight,
                         "quantity": 1,
                         "product_code": 1241
-                    },
-                    {
-                        "name": "tẩy",
-                        "weight": 0.2,
-                        "quantity": 1,
-                        "product_code": 1254
-                    },
-                    {
-                        "name": "đá",
-                        "weight": 2,
-                        "quantity": 13,
-                        "product_code": 1255
                     }
                 ],
                 "order": {
@@ -59,15 +47,15 @@ const OrderPage = () => {
                     "pick_province": "Thành Phố Hồ Chí Minh",
                     "pick_district": "Quận 8",
                     "pick_tel": "0783891752",
-                    "name": "An",
-                    "address": "180 Cao Lỗ",
-                    "province": "Thành Phố Hồ Chí Minh",
-                    "district": "Quận 8",
-                    "ward": "Phường 4",
+                    "name": orderData.full_name,
+                    "address": orderData.address,
+                    "province": orderData.province,
+                    "district": orderData.district,
+                    "ward": orderData.ward,
                     "street": "Cao Lỗ",
                     "hamlet": "Khác",
-                    "tel": "0772097482",
-                    "email": "anchau03102003",
+                    "tel": orderData.tel,
+                    "email": orderData.email,
                     "return_name": "Châu Nguyễn Trường An",
                     "return_address": "nhà số 170/1",
                     "return_provice": "Thành Phố Hồ Chí Minh",
