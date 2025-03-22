@@ -39,13 +39,13 @@ const ThankYouPage = () => {
           pick_tel: "0783891752",
           name: orderData.full_name,
           address: orderData.address,
-          province: "Thành Phố Hồ Chí Minh",
-          district: "Quận 8",
-          ward: "Phường 4",
-          street: "Cao Lỗ",
+          province: orderData.province,
+          district: orderData.district,
+          ward: orderData.ward,
+          street: orderData.street,
           hamlet: "Khác",
           tel: orderData.tel,
-          email: "anchau03102003@gmail.com",
+          email: orderData.email,
           return_name: "Châu Nguyễn Trường An",
           return_address: "nhà số 170/1",
           return_provice: "Thành Phố Hồ Chí Minh",
@@ -66,25 +66,43 @@ const ThankYouPage = () => {
         })
         .then((response) => {
           console.log("Response từ server proxy:", response.data);
-          // Lưu thông tin tracking nếu cần
-          localStorage.setItem(
-            "tracking_order",
-            response.data.order.tracking_id
-          );
-          console.log("Tracking order từ GHTK:", response.data.order.tracking_id);
-          setTrackingOrder(response.data.order.tracking_id);
+          if (response.data.success && response.data.order) {
+            const trackingInfo = response.data.order;
+            console.log("Tracking info:", trackingInfo);
 
-          // Lưu thông tin đơn hàng vào localStorage
-          const savedOrders = localStorage.getItem("orders");
-          const orders = savedOrders ? JSON.parse(savedOrders) : [];
-          const newOrder = {
-            ...orderData,
-            id: uuid,
-            trackingOrder: response.data.order.tracking_id,
-            orderDate: new Date().toISOString(),
-          };
-          orders.push(newOrder);
-          localStorage.setItem("orders", JSON.stringify(orders));
+            // Lưu thông tin tracking nếu cần
+            localStorage.setItem(
+              "tracking_order",
+              response.data.order.tracking_id
+            );
+            console.log("Tracking order từ GHTK:", response.data.order.tracking_id);
+            setTrackingOrder(response.data.order.tracking_id);
+
+            // Lưu thông tin đơn hàng vào localStorage
+            const savedOrders = localStorage.getItem("orders");
+            const orders = savedOrders ? JSON.parse(savedOrders) : [];
+            const newOrder = {
+              ...orderData,
+              id: uuid,
+              trackingOrder: response.data.order.tracking_id,
+              orderDate: new Date().toISOString(),
+              ghtkInfo: {
+                label_id: trackingInfo.label_id,
+                date_to_delay_deliver: trackingInfo.date_to_delay_deliver,
+                date_to_delay_pick: trackingInfo.date_to_delay_pick,
+                estimated_deliver_time: trackingInfo.estimated_deliver_time,
+                estimated_pick_time: trackingInfo.estimated_pick_time,
+                fee: trackingInfo.fee,
+                insurance_fee: trackingInfo.insurance_fee,
+                is_xfast: trackingInfo.is_xfast,
+                ship_money: trackingInfo.ship_money,
+                pick_money: trackingInfo.pick_money,
+                products: trackingInfo.products
+              }
+            };
+            orders.push(newOrder);
+            localStorage.setItem("orders", JSON.stringify(orders));
+          }
         })
         .catch((error) => {
           console.error(

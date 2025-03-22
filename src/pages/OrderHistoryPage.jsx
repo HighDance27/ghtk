@@ -56,6 +56,7 @@ const OrderHistoryPage = () => {
         try {
             const response = await axios.get(
                 `http://localhost:8080/api/proxy/shipment/track/${order.trackingOrder}`
+                , {},
             );
 
             console.log("Response từ API:", response.data);
@@ -79,9 +80,9 @@ const OrderHistoryPage = () => {
                                                 trackingInfo?.status === 12 ? 'Đang lấy hàng' :
                                                     trackingInfo?.status || 'N/A'
                                 }</p>
-                                <p><strong>Địa chỉ giao hàng:</strong> {trackingInfo?.address || 'N/A'}</p>
-                                <p><strong>Ngày tạo:</strong> {trackingInfo?.created ? new Date(trackingInfo.created).toLocaleString('vi-VN') : 'N/A'}</p>
-                                <p><strong>Ngày giao hàng dự kiến:</strong> {trackingInfo?.deliver_date ? new Date(trackingInfo.deliver_date).toLocaleString('vi-VN') : 'N/A'}</p>
+                                <p><strong>Địa chỉ giao hàng:</strong> Đường {order.street}, Số nhà {order.address}, {order.ward}, {order.district}, {order.province}</p>
+                                <p><strong>Ngày tạo:</strong> {order.orderDate ? new Date(order.orderDate).toLocaleString('vi-VN') : 'N/A'}</p>
+                                <p><strong>Ngày giao hàng dự kiến:</strong> {order.ghtkInfo?.estimated_deliver_time ? new Date(order.ghtkInfo.estimated_deliver_time).toLocaleDateString('vi-VN') : 'N/A'}</p>
                             </div>
 
                             <div>
@@ -102,18 +103,15 @@ const OrderHistoryPage = () => {
 
                             <div>
                                 <h3>Thông tin khác</h3>
-                                <p><strong>Phí vận chuyển:</strong> {trackingInfo?.ship_money ? new Intl.NumberFormat("vi-VN", {
+                                <p><strong>Phí vận chuyển:</strong> {order.ghtkInfo?.fee ? new Intl.NumberFormat("vi-VN", {
                                     style: "currency",
                                     currency: "VND",
-                                }).format(trackingInfo.ship_money) : 'N/A'}</p>
-                                <p><strong>Tiền thu hộ:</strong> {trackingInfo?.pick_money ? new Intl.NumberFormat("vi-VN", {
+                                }).format(order.ghtkInfo?.fee) : 'N/A'}</p>
+                                <p><strong>Hỏa tốc:</strong> {order.ghtkInfo?.is_xfast === 0 ? "Không" : "Có"}</p>
+                                <p><strong>Bảo hiểm:</strong> {order.ghtkInfo?.insurance_fee !== undefined ? new Intl.NumberFormat("vi-VN", {
                                     style: "currency",
                                     currency: "VND",
-                                }).format(trackingInfo.pick_money) : 'N/A'}</p>
-                                <p><strong>Bảo hiểm:</strong> {trackingInfo?.insurance ? new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                }).format(trackingInfo.insurance) : 'N/A'}</p>
+                                }).format(order.ghtkInfo.insurance_fee) : 'N/A'}</p>
                             </div>
                         </div>
                     ),
@@ -138,6 +136,9 @@ const OrderHistoryPage = () => {
             title: "Ngày đặt",
             dataIndex: "orderDate",
             key: "orderDate",
+            render: (orderDate) => (
+                orderDate ? new Date(orderDate).toLocaleString('vi-VN') : 'N/A'
+            ),
         },
         {
             title: "Tổng tiền",
@@ -179,7 +180,6 @@ const OrderHistoryPage = () => {
                     {!record.status && (
                         <CloseCircleFilled
                             type="link"
-                            danger
                             onClick={() => {
                                 Modal.confirm({
                                     title: 'Xác nhận hủy đơn hàng',

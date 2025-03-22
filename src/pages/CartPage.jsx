@@ -176,9 +176,19 @@ const CartPage = () => {
             message.warning("Giỏ hàng của bạn đang trống.");
             return;
         }
+
+        const totalAmount = calculateTotal();
+        if (totalAmount > 20000000) {
+            message.error("Tổng giá trị đơn hàng không được vượt quá 20.000.000 VNĐ");
+            return;
+        }
+
         form.validateFields().then(values => {
             const orderData = {
                 ...values,
+                province: provinces.find(p => p.id === values.province)?.name || values.province,
+                district: districts.find(d => d.id === values.district)?.name || values.district,
+                ward: wards.find(w => w.id === values.ward)?.name || values.ward,
                 items: cartItems.map(item => ({
                     ...item,
                     quantity: quantities[item.id] || 1
@@ -273,7 +283,29 @@ const CartPage = () => {
                                 <Input placeholder="Nhập email" />
                             </Form.Item>
 
-                            <Form.Item name="date_of_birth" label="Ngày sinh *" rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}>
+                            <Form.Item
+                                name="date_of_birth"
+                                label="Ngày sinh *"
+                                rules={[
+                                    { required: true, message: "Vui lòng chọn ngày sinh" },
+                                    {
+                                        validator: (_, value) => {
+                                            if (!value) return Promise.resolve();
+                                            const today = new Date();
+                                            const birthDate = new Date(value);
+                                            let age = today.getFullYear() - birthDate.getFullYear();
+                                            const monthDiff = today.getMonth() - birthDate.getMonth();
+                                            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                                                age--;
+                                            }
+                                            if (age < 16) {
+                                                return Promise.reject("Bạn phải từ 16 tuổi trở lên");
+                                            }
+                                            return Promise.resolve();
+                                        }
+                                    }
+                                ]}
+                            >
                                 <Input type="date" />
                             </Form.Item>
 
@@ -326,9 +358,11 @@ const CartPage = () => {
                                     }))}
                                 />
                             </Form.Item>
-
-                            <Form.Item name="address" label="Tên đường, số nhà " rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}>
-                                <Input placeholder="Nhập tên đường, số nhà" />
+                            <Form.Item name="street" label="Tên đường" rules={[{ required: true, message: "Vui lòng nhập tên đường" }]}>
+                                <Input placeholder="Nhập tên đường" />
+                            </Form.Item>
+                            <Form.Item name="address" label="Số nhà " rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}>
+                                <Input placeholder="Nhập số nhà" />
                             </Form.Item>
                             <Form.Item name="note" label="Ghi chú">
                                 <Input.TextArea placeholder="Nhập ghi chú cho đơn hàng" rows={3} />
