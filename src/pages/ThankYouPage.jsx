@@ -32,7 +32,7 @@ const ThankYouPage = () => {
         order: {
           id: uuid,
           pick_name: "Châu Nguyễn Trường An",
-          pick_money: 0,
+          pick_money: orderData.payment_method === "cod" ? orderData.total : 0,
           pick_address: "nhà số 170/1 Nguyễn Thị Mười",
           pick_province: "Thành Phố Hồ Chí Minh",
           pick_district: "Quận 8",
